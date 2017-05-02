@@ -1,4 +1,5 @@
 import cmath
+import netutil
 from random import uniform
 
 class Network:
@@ -94,7 +95,7 @@ class Layer:
             for j in range(len(layer.neurons)):
                 sum += layer.neurons[j].value * self.neurons[i].weights[j]
 
-            self.neurons[i].value = 1/(1 + cmath.exp(-sum))
+            self.neurons[i].value = netutil.sigmoid(sum)
 
     def __str__(self):
         o = "Layer of size " + str(len(self.neurons)) + ":"
