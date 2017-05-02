@@ -12,8 +12,12 @@ class Network:
         self.layers.append(Layer(inputNeurons))
         for i in range(len(hiddenNeurons)):
             self.layers.append(Layer(hiddenNeurons[i]))
-        self.layers.append(Layer(outputNeurons))
 
+        self.layers.append(Layer(outputNeurons))
+    pass
+
+    # Calculate neural network
+    # @param inputs [float[]] inputs to network
     def calc(self, inputs):
         for i in range(len(inputs)):
             self.layers[0].neurons[i].value = inputs[i]
@@ -22,7 +26,11 @@ class Network:
             self.layers[i].compute(self.layers[i - 1])
 
         return self.layers[len(self.layers) - 1]
+    pass
 
+    # propagate over weights
+    # @param output [float[]] expected output
+    # @param learningRate [float] rate at which to propagate
     def propagate(self, output, learningRate):
         outputLayer = self.layers[len(self.layers) - 1]
         inputLayer = self.layers[0]
@@ -45,6 +53,8 @@ class Network:
                     sum = hiddenNeuron1.value
                     gradient = -value * (1.0 - value) * sum * w
                     hiddenNeuron.weights[inputValue] -= learningRate * gradient
+                pass
+            pass
 
             for i in range(len(hiddenLayer.neurons)):
                 hiddenNeuron = hiddenLayer.neurons[i]
@@ -62,9 +72,14 @@ class Network:
                         outputError = outputValue - output[var30]
                         outputGradient = outputError * outputValue * (1.0 - outputValue) * outputWeight
                         sum += outputGradient
+                    pass
 
                     gradient = value * (1.0 - value) * var29 * sum
                     hiddenNeuron.weights[var28] -= learningRate * gradient
+                pass
+            pass
+        pass
+    pass
 
     # Network toString
     def __str__(self):
@@ -72,6 +87,8 @@ class Network:
         for layer in self.layers:
             o += "\n\t" + str(layer)
         return o
+    pass
+pass
 
 class Neuron:
     def __init__(self, weights):
@@ -79,16 +96,22 @@ class Neuron:
         self.weights = []
         for _ in range(weights):
             self.weights.append(uniform(-1, 1))
+    pass
 
     def __str__(self):
-        return "<" + str(self.value) + ">";
+        return "<" + str(self.value).strip("()") + ">";
+    pass
+pass
 
 class Layer:
     def __init__(self, size):
         self.neurons = []
         for _ in range(size):
             self.neurons.append(Neuron(size))
+    pass
 
+    # Computes layer with other
+    # @param layer [Layer] layer to compute with
     def compute(self, layer):
         for i in range(len(self.neurons)):
             sum = 0.0
@@ -96,9 +119,13 @@ class Layer:
                 sum += layer.neurons[j].value * self.neurons[i].weights[j]
 
             self.neurons[i].value = netutil.sigmoid(sum)
+        pass
+    pass
 
     def __str__(self):
         o = "Layer of size " + str(len(self.neurons)) + ":"
         for neuron in self.neurons:
             o += "\n\t" + str(neuron)
         return o
+    pass
+pass
