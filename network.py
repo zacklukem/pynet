@@ -99,7 +99,7 @@ class Neuron:
     pass
 
     def __str__(self):
-        return "<" + str(self.value).strip("()") + ">";
+        return "<" + str(self.value) + ">";
     pass
 pass
 
@@ -125,7 +125,7 @@ class Layer:
     def __str__(self):
         o = "Layer of size " + str(len(self.neurons)) + ":"
         for neuron in self.neurons:
-            o += "\n\t" + str(neuron)
+            o += "\n\t\t" + str(neuron)
         return o
     pass
 pass

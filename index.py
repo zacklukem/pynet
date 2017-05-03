@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 from network import *
 from random import uniform
+import netutil as util
 
-network = Network(2, [2], 2)            # new network with 2 inputs 1 layer of 2
+network = util.load("i_like_0_5.json")
 pass                                    # hiddens and 2 outputs
 for i in range(10000):
     network.calc([                      # Train with random numbers
@@ -18,3 +19,5 @@ network.calc([
 ])                                      # test with random number
 
 print(network)                          # print values
+
+util.save(network, "i_like_0_5.json")
