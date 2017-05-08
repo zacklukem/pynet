@@ -1,21 +1,26 @@
 import math
 import json
-import network as netlib
+from pynet import network as netlib
+
+
+
 
 def sigmoid(number):
     return 1/(1+math.exp(-number))
-pass
+
+
 
 def logit(number):
     return math.log(number/(1-number))
-pass
+
+
 
 def logit_arr(array):
     for i in range(array):
         array[i] = logit(array[i])
-    pass
     return array
-pass
+
+
 
 def load(path):
     file = open(path, "r")
@@ -23,6 +28,7 @@ def load(path):
     file.close()
     jsonO = json.loads(data)
     network = netlib.Network(jsonO['input_neuron_count'], jsonO['hidden_neuron_count'], jsonO['output_neuron_count'])
+    
     for i in range(len(jsonO['weights'])):
         layer = jsonO['weights'][i]
         for j in range(len(layer)):
@@ -30,11 +36,10 @@ def load(path):
             for k in range(len(neuron)):
                 weight = neuron[k]
                 network.layers[i].neurons[j].weights[k] = weight
-            pass
-        pass
-    pass
+    
     return network
-pass
+
+
 
 def save(network, path):
     i = []
@@ -47,12 +52,10 @@ def save(network, path):
             k = []
             for weight in neuron.weights:
                 k.append(weight)
-            pass
             j.append(k)
-        pass
         i.append(j)
-    pass
     hn = []
+    
     for layer in range(1, len(network.layers) - 1):
         hn.append(len(network.layers[layer].neurons))
     out = {
@@ -61,8 +64,8 @@ def save(network, path):
         'output_neuron_count': len(network.layers[len(network.layers)-1].neurons),
         'weights': i
     }
+    
     jsonO = json.dumps(out, indent=4, sort_keys=True)
     file = open(path, "w")
     file.write(jsonO)
     file.close()
-pass
