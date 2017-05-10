@@ -34,26 +34,34 @@ class Network:
     
     # Train the network with the data 
     # @param inputs [float[][]] training data
-    # @param expected [float[]] expected outputs of the network
+    # @param expected [float[][]] expected outputs of the network
     # @param learningRate [float] rate at which to propagate
     def train(self, inputs, expected, learningRate):
-        for data in inputs:
+        numLoops = min(len(inputs), len(expected))
+        i = 1
+        prev = -1
+        for data, out in zip(inputs, expected):
+            currentPercent = round(i / numLoops * 100)
+            if currentPercent != prev and currentPercent % 5 == 0:
+                print(str(currentPercent) + '%')
+                prev = currentPercent
             self.calc(data)
-            self.propagate(expected, learningRate)
+            self.propagate(out, learningRate)
+            i = i + 1
     
     
     
     # Test the network with the data
     # @param inputs [float[][]] testing data
-    # @param expected [float[]] expected outputs of the network
+    # @param expected [float[][]] expected outputs of the network
     # @return error [float[]] error of the output nodes
     def test(self, inputs, expected):
         error = []
         
-        for data in inputs:
+        for data, out in zip(inputs, expected):
             outputLayer = self.calc(data)
-            # sum of error of all neurons
-            error.append(sum([expected[i] - neuron.value for i, neuron in enumerate(outputLayer.neurons)]))
+            # average of error of all neurons
+            error.append(sum([out[i] - neuron.value for i, neuron in enumerate(outputLayer.neurons)]) / len(outputLayer.neurons))
         
         # return average error of all tests
         return sum(error) / len(inputs)
@@ -147,7 +155,8 @@ class Layer:
         for i in range(len(self.neurons)):
             total = 0.0
             for j in range(len(layer.neurons)):
-                total += layer.neurons[j].value * self.neurons[i].weights[j]
+                # multiply previous layer's value by previous layer's weight for this neuron
+                total += layer.neurons[j].value * layer.neurons[j].weights[j]
 
             self.neurons[i].value = netutil.sigmoid(total)
 
